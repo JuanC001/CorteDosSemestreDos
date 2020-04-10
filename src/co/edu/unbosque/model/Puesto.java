@@ -84,7 +84,7 @@ public class Puesto implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Puesto [Departamento=" + Dept + ", Ciudad=" + Ciudad + ", nombre=" + nombre + ", Direccion=" + Direccion + "]";
+		return "\nDepartamento=" + Dept + ", Ciudad=" + Ciudad + ", nombre=" + nombre + ", Direccion=" + Direccion + "";
 	}
 	
 	

@@ -3,6 +3,7 @@ package co.edu.unbosque.model.persistence;
 import java.util.ArrayList;
 
 import co.edu.unbosque.model.Persona;
+import co.edu.unbosque.model.Puesto;
 
 public class PersonaDAO {
 
@@ -21,6 +22,7 @@ public class PersonaDAO {
 		if(buscar(cc, persona)!=null) {
 			
 			persona.add(uno);
+			archivo.escribirPersona(persona);
 			
 		}
 		
@@ -41,6 +43,47 @@ public class PersonaDAO {
 		}
 		
 		return nuevo;
+		
+	}
+	
+	public void agregarPuesto(String dpt, String mun, String nombrepst, String ddr, String cce, ArrayList<Puesto> puesto, ArrayList<Persona> personas) {
+		
+		Persona persona = buscar(cce,personas);
+		
+		Puesto puestoAdd = null;
+		
+		for(int i = 0; i<puesto.size();i++) {
+			
+			if(puesto.get(i).getDept().equals(dpt)) {
+				
+				if(puesto.get(i).getCiudad().equals(mun)) {
+					
+					if(puesto.get(i).getNombre().equals(nombrepst)) {
+						
+						puesto.get(i).getPersona().add(persona);
+						puestoAdd = puesto.get(i);
+						
+						System.out.println("Se ha agregador la persona al puesto " + puesto.get(i).getNombre());
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		for(int i = 0; i<personas.size();i++) {
+			
+			if(personas.get(i).getCc().equals(cce)) {
+				
+				personas.get(i).setPst(puestoAdd);
+				
+			}
+			
+		}
+		
+		
 		
 	}
 	
