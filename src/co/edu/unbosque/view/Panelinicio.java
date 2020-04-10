@@ -14,11 +14,12 @@ public class Panelinicio extends JPanel {
 	public JButton generarReporte;
 	public JButton mostrarLista;
 	public JButton mostrarInformacion;
+	public JButton eliminarPersona;
 
 	public Panelinicio() {
 
 		setBorder(new TitledBorder("Puesto Votación"));
-		setLayout(new GridLayout(6,1));
+		setLayout(new GridLayout(7,1));
 
 		
     	
@@ -27,6 +28,9 @@ public class Panelinicio extends JPanel {
     	
     	modificarPersona= new JButton("Modificar Persona");
     	add(modificarPersona);
+    	
+    	eliminarPersona = new JButton("Eliminar Persona");
+    	add(eliminarPersona);
     	
     	modificarPuesto = new JButton("Modificar/Seleccionar Puesto");
     	add(modificarPuesto);

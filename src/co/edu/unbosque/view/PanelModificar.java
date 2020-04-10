@@ -3,6 +3,7 @@ package co.edu.unbosque.view;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -17,17 +18,12 @@ public class PanelModificar extends JPanel {
 	private JLabel labapellidos;
 	private JTextField txtapellidos;
 	private JLabel labcedula;
-	private JTextField txtcedula;
-	private JLabel labfechaExpCed;
-	private JTextField txtfechaExpCed;
-	private JLabel lablugarExpCed;
-	private JTextField txtlugarExpCed;
 	private JLabel labfechaNac;
-	private JTextField txtfechaNac;
+	private PanelIngresarFecha txtfechaNac;
 	private JLabel lablugarNac;
 	private JTextField txtlugarNac;
 	private JLabel labsexo;
-	private JTextField txtsexo;
+	private JComboBox txtsexo;
 	
 	private JButton modificar; 
 		
@@ -60,28 +56,10 @@ public class PanelModificar extends JPanel {
 		txtapellidos = new JTextField();
 		add(txtapellidos);
 
-		labcedula = new JLabel("Nueva Cedula:  ");
-		add(labcedula);
-
-		txtcedula = new JTextField();
-		add(txtcedula);
-
-		labfechaExpCed = new JLabel("Nueva Fecha expedición cedula:  ");
-		add(labfechaExpCed);
-
-		txtfechaExpCed = new JTextField();
-		add(txtfechaExpCed);
-
-		lablugarExpCed = new JLabel("Nuevo Lugar de expedeción cedula:  ");
-		add(lablugarExpCed);
-
-		txtlugarExpCed = new JTextField();
-		add(txtlugarExpCed);
-
 		labfechaNac = new JLabel("Nueva Fecha Nacimiento:  ");
 		add(labfechaNac);
 
-		txtfechaNac = new JTextField();
+		txtfechaNac = new PanelIngresarFecha();
 		add(txtfechaNac);
 
 		lablugarNac = new JLabel("Nuevo Lugar Nacimiento:  ");
@@ -93,7 +71,9 @@ public class PanelModificar extends JPanel {
 		labsexo = new JLabel("Nuevo Sexo:  ");
 		add(labsexo);
 
-		txtsexo = new JTextField();
+		String []sexo = {"Seleccione...","Femenino","Masculino"};
+		
+		txtsexo = new JComboBox<Object>(sexo);
 		add(txtsexo);
 		
 		modificar = new JButton("Modificar");
@@ -187,68 +167,6 @@ public class PanelModificar extends JPanel {
 		this.labcedula = labcedula;
 	}
 
-
-
-	public JTextField getTxtcedula() {
-		return txtcedula;
-	}
-
-
-
-	public void setTxtcedula(JTextField txtcedula) {
-		this.txtcedula = txtcedula;
-	}
-
-
-
-	public JLabel getLabfechaExpCed() {
-		return labfechaExpCed;
-	}
-
-
-
-	public void setLabfechaExpCed(JLabel labfechaExpCed) {
-		this.labfechaExpCed = labfechaExpCed;
-	}
-
-
-
-	public JTextField getTxtfechaExpCed() {
-		return txtfechaExpCed;
-	}
-
-
-
-	public void setTxtfechaExpCed(JTextField txtfechaExpCed) {
-		this.txtfechaExpCed = txtfechaExpCed;
-	}
-
-
-
-	public JLabel getLablugarExpCed() {
-		return lablugarExpCed;
-	}
-
-
-
-	public void setLablugarExpCed(JLabel lablugarExpCed) {
-		this.lablugarExpCed = lablugarExpCed;
-	}
-
-
-
-	public JTextField getTxtlugarExpCed() {
-		return txtlugarExpCed;
-	}
-
-
-
-	public void setTxtlugarExpCed(JTextField txtlugarExpCed) {
-		this.txtlugarExpCed = txtlugarExpCed;
-	}
-
-
-
 	public JLabel getLabfechaNac() {
 		return labfechaNac;
 	}
@@ -259,15 +177,13 @@ public class PanelModificar extends JPanel {
 		this.labfechaNac = labfechaNac;
 	}
 
-
-
-	public JTextField getTxtfechaNac() {
+	public PanelIngresarFecha getTxtfechaNac() {
 		return txtfechaNac;
 	}
 
 
 
-	public void setTxtfechaNac(JTextField txtfechaNac) {
+	public void setTxtfechaNac(PanelIngresarFecha txtfechaNac) {
 		this.txtfechaNac = txtfechaNac;
 	}
 
@@ -308,14 +224,13 @@ public class PanelModificar extends JPanel {
 	}
 
 
-
-	public JTextField getTxtsexo() {
+	public JComboBox getTxtsexo() {
 		return txtsexo;
 	}
 
 
 
-	public void setTxtsexo(JTextField txtsexo) {
+	public void setTxtsexo(JComboBox txtsexo) {
 		this.txtsexo = txtsexo;
 	}
 

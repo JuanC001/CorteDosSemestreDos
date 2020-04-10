@@ -139,6 +139,8 @@ public class Archivo {
 				entrada = new ObjectInputStream(new FileInputStream(personaDat));
 				personas = (ArrayList<Persona>) entrada.readObject();
 				
+				System.out.println(personas);
+				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 			} catch (IOException e) {
@@ -182,6 +184,8 @@ public class Archivo {
 			salida.writeObject(personas);
 			salida.close();
 			
+			System.out.println(personas);
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -192,5 +196,55 @@ public class Archivo {
 		
 		
 	}
+
+	public File getArchivoCSV() {
+		return archivoCSV;
+	}
+
+	public void setArchivoCSV(File archivoCSV) {
+		this.archivoCSV = archivoCSV;
+	}
+
+	public File getPersonaDat() {
+		return personaDat;
+	}
+
+	public void setPersonaDat(File personaDat) {
+		this.personaDat = personaDat;
+	}
+
+	public File getPuestosDat() {
+		return puestosDat;
+	}
+
+	public void setPuestosDat(File puestosDat) {
+		this.puestosDat = puestosDat;
+	}
+
+	public boolean isExiste() {
+		return existe;
+	}
+
+	public void setExiste(boolean existe) {
+		this.existe = existe;
+	}
+
+	public ObjectInputStream getEntrada() {
+		return entrada;
+	}
+
+	public void setEntrada(ObjectInputStream entrada) {
+		this.entrada = entrada;
+	}
+
+	public ObjectOutputStream getSalida() {
+		return salida;
+	}
+
+	public void setSalida(ObjectOutputStream salida) {
+		this.salida = salida;
+	}
+	
+	
 	
 }

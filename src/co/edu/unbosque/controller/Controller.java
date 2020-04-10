@@ -6,6 +6,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
+import co.edu.unbosque.model.FormatoCedulaException;
+import co.edu.unbosque.model.FormatoNombreException;
 import co.edu.unbosque.model.Persona;
 import co.edu.unbosque.model.Puesto;
 import co.edu.unbosque.model.persistence.Archivo;
@@ -26,6 +30,8 @@ public class Controller implements ActionListener{
 	public Controller() {
 		
 		archivo = new Archivo();
+		
+		personadao = new PersonaDAO(archivo);
 		
 		puestos = archivo.leer_arhivoCSV();
 		
@@ -49,7 +55,12 @@ public class Controller implements ActionListener{
 		ventana.venIni.modificarPersona.addActionListener(this);
 		ventana.venIni.modificarPuesto.addActionListener(this);
 		ventana.venIni.mostrarLista.addActionListener(this);
+		ventana.venIni.eliminarPersona.addActionListener(this);
 		ventana.puestoLis.buscar.addActionListener(this);
+		ventana.venReg.Agregar.addActionListener(this);
+		
+		ventana.ven.getModificar().addActionListener(this);
+		ventana.ven.iccant.validar.addActionListener(this);
 		
 		//Colocar departamentos
 		
@@ -216,6 +227,92 @@ public class Controller implements ActionListener{
 		}
 		
 	}
+
+	public void checkAgregarPersona() {
+		
+		boolean completo = true;
+
+		String de = (String) ventana.venReg.txtfechaExpCed.iDia.getSelectedItem();
+		String me = (String) ventana.venReg.txtfechaExpCed.iMes.getSelectedItem();
+		String ae = (String) ventana.venReg.txtfechaExpCed.iAño.getSelectedItem();
+		
+		String le = ventana.venReg.txtlugarExpCed.getText();
+		
+		String dn = (String) ventana.venReg.txtfechaNac.iDia.getSelectedItem();
+		String mn = (String) ventana.venReg.txtfechaNac.iMes.getSelectedItem();
+		String an = (String) ventana.venReg.txtfechaNac.iAño.getSelectedItem();
+		
+		String ln = (String) ventana.venReg.txtlugarNac.getText();
+		
+		String sexo = (String) ventana.venReg.txtsexo.getSelectedItem();
+		char sex = sexo.charAt(0);
+		
+		if(ventana.venReg.txtsexo.getSelectedItem().equals("Seleccione...")) {
+			
+			completo = false;
+			
+		}
+		
+		String cc;
+		String nom = ventana.venReg.txtnombres.getText();
+		String apll = ventana.venReg.txtapellidos.getText();
+		try {
+			cc = checkCedulaException(ventana.venReg.txtcedula.getText());
+			nom = checknombre(ventana.venReg.txtnombres.getText());
+			apll = checknombre(ventana.venReg.txtapellidos.getText());
+			
+			if(completo == true) {
+				personadao.agregarPersona(cc, de, me, ae, le, apll, nom, dn, mn, an, ln, sex, personas);
+			}
+		
+		} catch (FormatoCedulaException e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, e.getMessage());
+		} catch (FormatoNombreException e2) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, e2.getMessage());
+		}
+		
+		
+		
+		System.out.println("Finalizo");
+		
+	}
+	
+	public String checknombre(String nombre) throws FormatoNombreException{
+		
+		String nombre1 = nombre;
+		
+		if(!(nombre1.matches("[0-9]*"))) {
+			
+			return nombre1;
+			
+		}else {
+			
+			throw new FormatoNombreException("Creo que un nombre o apellido no contiene numeros");
+			
+		}
+		
+	}
+	
+	public String checkCedulaException(String cedula) throws FormatoCedulaException{
+		
+		String cc = cedula;
+
+		if(cc.length()>5&&!(cc.matches("[A-Za-z]"))&&cc.length()<10) {
+			
+			return cc;
+			
+		}else {
+			
+			throw new FormatoCedulaException("La cedula no es valida");
+			
+		}
+			
+				
+			
+		
+	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -231,6 +328,13 @@ public class Controller implements ActionListener{
 			ventana.puestoLis.setVisible(false);
 		}
 		
+	if(e.getActionCommand().equals("Eliminar Persona")) {
+			
+			String aux = JOptionPane.showInputDialog("Ingrese el numero de Cedula para eliminar");
+			personadao.eliminarPersona(aux, personas, puestos);
+			
+		}
+		
 		if(e.getActionCommand().equals("Modificar Persona")) {
 			
 			ventana.venMod.setVisible(false);
@@ -238,14 +342,6 @@ public class Controller implements ActionListener{
 			ventana.venReg.setVisible(false);
 			ventana.puesto.setVisible(false);
 			ventana.puestoLis.setVisible(false);
-		}
-		
-		if(e.getActionCommand().equals("Modificar")) {
-			
-			ventana.venMod.setVisible(true);
-			ventana.ven.setVisible(false);
-			ventana.venReg.setVisible(false);
-			ventana.puesto.setVisible(false);
 		}
 		
 		if(e.getActionCommand().equals("Modificar/Seleccionar Puesto")) {
@@ -280,7 +376,7 @@ public class Controller implements ActionListener{
 		
 		if(e.getActionCommand().equals("Agregar")) {
 			
-			
+			checkAgregarPersona();
 			
 		}
 		
@@ -288,9 +384,73 @@ public class Controller implements ActionListener{
 		
 		if(e.getActionCommand().equals("Buscar Persona")) {
 			
+			System.out.println(ventana.ven.iccant.iccant.getText());
+			
+			Persona buscar=personadao.buscar(ventana.ven.iccant.iccant.getText(), personas);
+			
+			if(buscar!=null) {
+				
+				ventana.ven.iccant.iccant.setEnabled(false);
+				
+			}
+			
+			System.out.println(buscar);
+				try {
+					ventana.ven.getTxtnombres().setText(buscar.getNombres());
+					ventana.ven.getTxtapellidos().setText(buscar.getApellidos());
+					
+					ventana.ven.getTxtlugarNac().setText(buscar.getLugar_nacimiento());
+					
+				}catch (Exception a){
+					JOptionPane.showMessageDialog(null, "Cedula no registrada");
+			
+				}
+			
 		}
 		
 		if(e.getActionCommand().equals("Modificar")) {
+			
+			boolean check = true;
+			
+			String cc = ventana.ven.getIccant().iccant.getText();
+			
+			String apll = ventana.ven.getTxtapellidos().getText();
+			String nom = ventana.ven.getTxtnombres().getText();
+			
+			String dn = (String) ventana.ven.getTxtfechaNac().iDia.getSelectedItem(); 
+			String mn = (String) ventana.ven.getTxtfechaNac().iMes.getSelectedItem(); 
+			String an = (String) ventana.ven.getTxtfechaNac().iAño.getSelectedItem();
+			
+			String sexo = (String) ventana.ven.getTxtsexo().getSelectedItem();
+			
+			if(sexo.equals("Seleccione...")) {
+				
+				check = false;
+				
+			}
+			
+			char sex = sexo.charAt(0);
+			
+			String ln = ventana.ven.getTxtlugarNac().getText();
+			
+			if(dn.equals("Dia...")||mn.equals("Mes...")||an.equals("Año...")) {
+				
+				JOptionPane.showMessageDialog(null, "Debe seleccionar una fecha completa");
+				check = false;
+				
+			}
+			
+			if(check == true&&ventana.ven.getIccant().iccant.isEnabled()==false) {
+				
+				personadao.modificarPersona(cc, apll, nom, dn, mn, an, ln, sex, personas);
+				
+			}else {
+				
+				JOptionPane.showMessageDialog(null, "Debe dar click a buscar persona. \nTambien debe revisar que esten completos todos los campos");
+				
+			}
+			
+			
 			
 		}
 		
@@ -298,9 +458,30 @@ public class Controller implements ActionListener{
 		
 		if(e.getActionCommand().equals("Validar")) {
 			
+			String cc = ventana.puesto.getTxtcedula().iccant.getText();
+			
+			if(personadao.buscar(cc, personas)!=null) {
+				
+				ventana.puesto.getTxtcedula().iccant.setEnabled(false);
+				
+			}
+			
 		}
 		
 		if(e.getActionCommand().equals("Seleccionar")) {
+			
+			String cce = ventana.puesto.getTxtcedula().iccant.getText();
+			
+			String dpt = ventana.puesto.getDepartamento().getSelectedItem().toString();
+			String mun = ventana.puesto.getMunicipio().getSelectedItem().toString();
+			String nombrepst = ventana.puesto.getNombrePuesto().getSelectedItem().toString();
+			
+			if(!(dpt.equals("Selecciona..."))||!mun.equals("Selecciona...")||!mun.equals("Selecciona...")) {
+				
+				personadao.agregarPuesto(dpt, mun, nombrepst, cce, puestos, personas);
+				
+			}
+			
 			
 		}
 		
